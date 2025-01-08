@@ -228,6 +228,18 @@
             opacity: 1;
         }
 
+        .footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            opacity: 1;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -349,186 +361,179 @@
 
     <div class="footer">
         <div>
-            <span data-i18n="userAgreement">用户协议</span>
+            <a href="#" target="_blank" rel="noopener noreferrer" 
+               data-i18n="userAgreement" 
+               data-url-key="userAgreementUrl">用户协议</a>
             <span class="separator">|</span>
-            <span data-i18n="privacyPolicy">隐私政策</span>
+            <a href="#" target="_blank" rel="noopener noreferrer" 
+               data-i18n="privacyPolicy" 
+               data-url-key="privacyPolicyUrl">隐私政策</a>
         </div>
-        <div data-i18n="icp">京ICP备2022035493号-3</div>
-        <div data-i18n="publicSecurity">京公网安备11011402014148号</div>
+        <div data-i18n="icp">京ICP备2022035493号-4A</div>
         <div data-i18n="copyright">Copyright © Mutation Lab All Rights Reserved.</div>
     </div>
 
     <script>
+        const i18n = {
+            zh: {
+                title: '听话小黑板',
+                lead: '"听话小黑板"让听障人士与亲友的沟通更轻松。',
+                userAgreement: '用户协议',
+                privacyPolicy: '隐私政策',
+                icp: '京ICP备2022035493号-4A',
+                copyright: 'Copyright © Mutation Lab All Rights Reserved.',
+                currentLang: '中文',
+                privacyPolicyUrl: 'https://mutacore.com/app/chatboard/privacy-policy?lang=zh',
+                userAgreementUrl: 'https://mutacore.com/app/chatboard/user-agreement?lang=zh',
+                images: [
+                    'https://i.ibb.co/3TjcCdT/image.png',
+                    'https://i.ibb.co/FYxC4JQ/image.png', 
+                    'https://i.ibb.co/hWM2tKK/image.png',
+                    'https://i.ibb.co/WFvCGCJ/image.png',
+                    'https://i.ibb.co/KjPY4JX/image.png'
+                ]
+            },
+            en: {
+                title: 'ChatBoard',
+                lead: 'ChatBoard makes communication easier for people with hearing disabilities.',
+                userAgreement: 'User Agreement',
+                privacyPolicy: 'Privacy Policy',
+                icp: 'Beijing ICP No.2022035493-4A',
+                copyright: 'Copyright © Mutation Lab All Rights Reserved.',
+                currentLang: 'English',
+                privacyPolicyUrl: 'https://mutacore.com/app/chatboard/privacy-policy?lang=en',
+                userAgreementUrl: 'https://mutacore.com/app/chatboard/user-agreement?lang=en',
+                images: [
+                    'https://i.ibb.co/6sfTrht/image.png',
+                    'https://i.ibb.co/gwBhpKd/1.png',
+                    'https://i.ibb.co/QXVVgYH/2.png', 
+                    'https://i.ibb.co/jGwFS3p/3.png',
+                    'https://i.ibb.co/hMFvVfk/4.png'
+                ]
+            },
+            ja: {
+                title: 'チャット黒板',
+                lead: 'チャット黒板で、聴覚障害者と家族・友人とのコミュニケーションがより簡単に。',
+                userAgreement: '利用規約',
+                privacyPolicy: 'プライバシーポリシー',
+                icp: '京ICP備2022035493号-4A',
+                copyright: 'Copyright © Mutation Lab All Rights Reserved.',
+                currentLang: '日本語',
+                privacyPolicyUrl: 'https://mutacore.com/app/chatboard/privacy-policy?lang=ja',
+                userAgreementUrl: 'https://mutacore.com/app/chatboard/user-agreement?lang=ja',
+                images: [
+                    'https://i.ibb.co/ZG8fBxL/image.png',
+                    'https://i.ibb.co/ZNNMwFX/1.png',
+                    'https://i.ibb.co/XbD87tr/2.png',
+                    'https://i.ibb.co/Bt57LpF/3.png',
+                    'https://i.ibb.co/nbL024J/4.png'
+                ]
+            }
+        };
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // 多语言配置
-            const i18n = {
-                zh: {
-                    title: '听话小黑板',
-                    lead: '"听话小黑板"让听障人士与亲友的沟通更轻松。',
-                    description: 'App 实时将语音转换为文字，帮助听障人士即时了解对话内容。简单直观的界面设计，让沟通自然顺畅。',
-                    cta: '下载"听话小黑板"，开启无障碍交流。',
-                    download: '立即下载',
-                    currentLang: '简体中文',
-                    userAgreement: '用户协议',
-                    privacyPolicy: '隐私政策',
-                    icp: '京ICP备2022035493号-3',
-                    publicSecurity: '京公网安备11011402014148号',
-                    copyright: 'Copyright © Mutation Lab All Rights Reserved.',
-                    images: [
-                        'https://i.ibb.co/3TjcCdT/image.png',
-                        'https://i.ibb.co/FYxC4JQ/image.png',
-                        'https://i.ibb.co/hWM2tKK/image.png',
-                        'https://i.ibb.co/WFvCGCJ/image.png',
-                        'https://i.ibb.co/KjPY4JX/image.png'
-                    ]
-                },
-                en: {
-                    title: 'ChatBoard',
-                    lead: 'ChatBoard makes communication easier for people with hearing disabilities.',
-                    description: 'The app converts speech to text in real-time, helping people with hearing disabilities understand conversations instantly. Simple and intuitive interface design makes communication natural and smooth.',
-                    cta: 'Download ChatBoard and start barrier-free communication.',
-                    download: 'Download Now',
-                    currentLang: 'English',
-                    userAgreement: 'User Agreement',
-                    privacyPolicy: 'Privacy Policy',
-                    icp: 'ICP License No.2022035493-3',
-                    publicSecurity: 'Public Security No.11011402014148',
-                    copyright: 'Copyright © Mutation Lab All Rights Reserved.',
-                    images: [
-                        'https://i.ibb.co/6sfTrht/image.png',
-                        'https://i.ibb.co/gwBhpKd/1.png',
-                        'https://i.ibb.co/QXVVgYH/2.png',
-                        'https://i.ibb.co/jGwFS3p/3.png',
-                        'https://i.ibb.co/hMFvVfk/4.png'
-                    ]
-                },
-                ja: {
-                    title: 'チャット黒板',
-                    lead: 'チャット黒板で、聴覚障害者と家族・友人とのコミュニケーションがより簡単に。',
-                    description: 'アプリが音声をリアルタイムでテキストに変換し、聴覚障害者が会話の内容をすぐに理解できるようサポートします。シンプルで直感的なインターフェースで、自然なコミュニケーションを実現。',
-                    cta: 'チャット黒板をダウンロードして、バリアフリーなコミュニケーションを始めましょう。',
-                    download: '今すぐダウンロード',
-                    currentLang: '日本語',
-                    userAgreement: '利用規約',
-                    privacyPolicy: 'プライバシーポリシー',
-                    icp: 'ICP許可証番号2022035493-3',
-                    publicSecurity: '公安備案番号11011402014148',
-                    copyright: 'Copyright © Mutation Lab All Rights Reserved.',
-                    images: [
-                        'https://i.ibb.co/ZG8fBxL/image.png',
-                        'https://i.ibb.co/ZNNMwFX/1.png',
-                        'https://i.ibb.co/XbD87tr/2.png',
-                        'https://i.ibb.co/Bt57LpF/3.png',
-                        'https://i.ibb.co/nbL024J/4.png'
-                    ]
-                }
-            };
-
+            // 初始化变量
+            let currentSlide = 0;
+            const totalSlides = 5;
+        
             // 获取DOM元素
             const languageBtn = document.getElementById('languageBtn');
+            const currentLangText = document.getElementById('currentLang');
             const languageMenu = document.getElementById('languageMenu');
-            const currentLang = document.getElementById('currentLang');
             const carousel = document.getElementById('carousel');
             const dots = document.querySelectorAll('.dot');
-            const options = document.querySelectorAll('.language-option');
-
-            // 语言切换功能
-            languageBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                languageMenu.classList.toggle('show');
-            });
-
-            document.addEventListener('click', () => {
-                languageMenu.classList.remove('show');
-            });
-
-            languageMenu.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-
-            // 更新语言函数
+        
+            // 获取浏览器语言
+            function getBrowserLanguage() {
+                const browserLang = navigator.language || navigator.userLanguage;
+                const lang = browserLang.toLowerCase().split('-')[0];
+                return ['zh', 'en', 'ja'].includes(lang) ? lang : 'en';
+            }
+        
+            // 更新语言内容
             function updateLanguage(lang) {
-                const elements = document.querySelectorAll('[data-i18n]');
-                elements.forEach(element => {
+                // 更新文本内容
+                document.querySelectorAll('[data-i18n]').forEach(element => {
                     const key = element.getAttribute('data-i18n');
                     if (i18n[lang][key]) {
                         element.textContent = i18n[lang][key];
                     }
                 });
-
-                // 更新图片
-                const carouselImages = document.querySelectorAll('.carousel img');
-                carouselImages.forEach((img, index) => {
+        
+                // 更新链接
+                document.querySelectorAll('[data-url-key]').forEach(element => {
+                    const urlKey = element.getAttribute('data-url-key');
+                    if (i18n[lang][urlKey]) {
+                        element.href = i18n[lang][urlKey];
+                    }
+                });
+        
+                // 更新轮播图片
+                document.querySelectorAll('.carousel img').forEach((img, index) => {
                     img.src = i18n[lang].images[index];
                 });
-
+        
                 // 更新当前语言显示
-                currentLang.textContent = i18n[lang].currentLang;
-                
-                // 更新文档语言
+                currentLangText.textContent = lang === 'zh' ? '简体中文' : lang === 'en' ? 'English' : '日本語';
                 document.documentElement.lang = lang;
                 
                 // 关闭语言菜单
                 languageMenu.classList.remove('show');
             }
-
-            // 语言选项点击事件
-            options.forEach(option => {
-                option.addEventListener('click', () => {
-                    const lang = option.getAttribute('data-lang');
-                    updateLanguage(lang);
-                });
-            });
-
-            // 轮播图功能
-            let currentIndex = 0;
-            let autoplayInterval;
-
+        
+            // 更新轮播图
             function updateCarousel() {
-                carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+                carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+                // 更新指示器
                 dots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === currentIndex);
+                    if (index === currentSlide) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
                 });
             }
-
-            function nextSlide() {
-                currentIndex = (currentIndex + 1) % dots.length;
-                updateCarousel();
-            }
-
-            function startAutoplay() {
-                autoplayInterval = setInterval(nextSlide, 3000);
-            }
-
-            function stopAutoplay() {
-                clearInterval(autoplayInterval);
-            }
-
-            // 点击圆点切换图片
+        
+            // 初始化语言
+            updateLanguage(getBrowserLanguage());
+        
+            // 语言按钮点击事件
+            languageBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                languageMenu.classList.toggle('show');
+            });
+        
+            // 语言选项点击事件
+            languageMenu.addEventListener('click', function(e) {
+                const langOption = e.target;
+                if (langOption.classList.contains('language-option')) {
+                    const selectedLang = langOption.getAttribute('data-lang');
+                    updateLanguage(selectedLang);
+                }
+            });
+        
+            // 点击空白处关闭语言菜单
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.language-switcher')) {
+                    languageMenu.classList.remove('show');
+                }
+            });
+        
+            // 轮播图指示器点击事件
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', () => {
-                    currentIndex = index;
+                    currentSlide = index;
                     updateCarousel();
-                    stopAutoplay();
-                    startAutoplay();
                 });
             });
-
-            // 鼠标悬停时停止自动播放
-            carousel.addEventListener('mouseenter', stopAutoplay);
-            carousel.addEventListener('mouseleave', startAutoplay);
-
-            // 预加载其他语言的图片
-            Object.values(i18n).forEach(lang => {
-                lang.images.forEach(src => {
-                    const img = new Image();
-                    img.src = src;
-                });
-            });
-
-            // 启动自动播放
-            startAutoplay();
+        
+            // 自动轮播
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateCarousel();
+            }, 3000);
         });
-    </script>
+        </script>
+
 </body>
 </html>
