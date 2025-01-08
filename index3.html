@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>听话小黑板 - 让沟通更简单</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #CD2147;
+            --text-color: #ffffff;
+            --transition-time: 0.3s;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--primary-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            flex: 1;
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            margin-right: 20px;
+        }
+
+        .app-header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .content p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            max-width: 500px;
+            line-height: 1.8;
+            letter-spacing: 0.01em;
+        }
+
+        .content p.lead {
+            font-size: 1.3em;
+            font-weight: 500;
+            margin-bottom: 25px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: white;
+            color: var(--primary-color);
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform var(--transition-time) ease;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .app-preview {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            position: relative;
+        }
+
+        .preview-container {
+            height: 90vh;
+            width: calc(90vh * 1242/2688);
+            position: relative;
+            overflow: hidden;
+            border-radius: 30px;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color var(--transition-time) ease;
+        }
+
+        .dot.active {
+            background: white;
+        }
+
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .language-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            backdrop-filter: blur(5px);
+            transition: all var(--transition-time) ease;
+        }
+
+        .language-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .language-icon {
+            flex-shrink: 0;
+        }
+
+        .language-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 5px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            overflow: hidden;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .language-menu.show {
+            display: block;
+        }
+
+        .language-option {
+            padding: 10px 20px;
+            color: #333;
+            cursor: pointer;
+            transition: background-color var(--transition-time) ease;
+            white-space: nowrap;
+        }
+
+        .language-option:hover {
+            background: #f5f5f5;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+        }
+
+        .footer .separator {
+            margin: 0 10px;
+            opacity: 0.7;
+        }
+
+        .footer span {
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer span:hover {
+            opacity: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 10px;
+            }
+
+            .app-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .app-icon {
+                margin: 0 0 15px 0;
+            }
+
+            .app-header h1 {
+                font-size: 2em;
+            }
+
+            .content p {
+                font-size: 1em;
+                margin: 0 auto 15px;
+            }
+
+            .content p.lead {
+                font-size: 1.2em;
+            }
+
+            .preview-container {
+                height: 70vh;
+                width: calc(70vh * 1242/2688);
+            }
+
+            .language-switcher {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .preview-container {
+                height: 60vh;
+                width: calc(60vh * 1242/2688);
+            }
+
+            .app-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .footer {
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="language-switcher">
+        <button class="language-btn" id="languageBtn">
+            <svg class="language-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                <path d="M460.8 85.3504C225.536 85.3504 34.1504 276.736 34.1504 512c0 235.264 191.3856 426.6496 426.6496 426.6496 235.264 0 426.6496-191.3856 426.6496-426.6496 0-235.264-191.3856-426.6496-426.6496-426.6496z m295.168 256h-98.304c-10.5984-51.2-25.856-96.6656-44.9024-134.6048a343.8592 343.8592 0 0 1 143.2064 134.6048zM802.1504 512c0 29.5424-4.1472 57.9584-11.264 85.3504H670.208a918.7328 918.7328 0 0 0 0-170.7008h120.7808c7.0656 27.3408 11.2128 55.808 11.2128 85.3504zM460.8 853.3504c-35.9424 0-83.1488-63.232-109.056-170.7008h218.0096c-25.8048 107.52-72.96 170.7008-108.9536 170.7008z m-123.392-256a802.3552 802.3552 0 0 1 0-170.7008h246.784a801.3824 801.3824 0 0 1 0 170.7008H337.408zM119.4496 512c0-29.5424 4.1472-58.0096 11.264-85.3504H251.392a918.7328 918.7328 0 0 0 0 170.7008H130.7136A339.3024 339.3024 0 0 1 119.4496 512zM460.8 170.6496c35.9936 0 83.1488 63.1808 109.056 170.7008H351.744c25.9072-107.52 73.1136-170.7008 109.056-170.7008z m-151.9104 36.096c-19.0464 37.9392-34.304 83.456-44.8512 134.6048H165.632a343.7056 343.7056 0 0 1 143.2576-134.6048z m-143.2576 475.904h98.304c10.5984 51.2 25.856 96.6656 44.9536 134.6048a343.9104 343.9104 0 0 1-143.2576-134.6048z m447.0784 134.6048c19.0464-37.9392 34.304-83.456 44.8512-134.6048h98.3552a343.3984 343.3984 0 0 1-143.2064 134.6048z" fill="#ffffff"/>
+            </svg>
+            <span id="currentLang">简体中文</span>
+        </button>
+        <div class="language-menu" id="languageMenu">
+            <div class="language-option" data-lang="zh">简体中文</div>
+            <div class="language-option" data-lang="en">English</div>
+            <div class="language-option" data-lang="ja">日本語</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <div class="app-header">
+                <img src="https://i.ibb.co/0QvkCGT/chatboard-logo.png" alt="App Icon" class="app-icon">
+                <h1 data-i18n="title">听话小黑板</h1>
+            </div>
+            <p class="lead" data-i18n="lead">"听话小黑板"让听障人士与亲友的沟通更轻松。</p>
+            <p data-i18n="description">App 实时将语音转换为文字，帮助听障人士即时了解对话内容。简单直观的界面设计，让沟通自然顺畅。</p>
+            <p data-i18n="cta">下载"听话小黑板"，开启无障碍交流。</p>
+            <a href="https://apps.apple.com/cn/app/%E5%90%AC%E8%AF%9D%E5%B0%8F%E9%BB%91%E6%9D%BF/id6445862914" class="download-btn" data-i18n="download">立即下载</a>
+        </div>
+        <div class="app-preview">
+            <div class="preview-container">
+                <div id="carousel" class="carousel">
+                    <img src="https://i.ibb.co/3TjcCdT/image.png" alt="Preview 0" loading="lazy">
+                    <img src="https://i.ibb.co/FYxC4JQ/image.png" alt="Preview 1" loading="lazy">
+                    <img src="https://i.ibb.co/hWM2tKK/image.png" alt="Preview 2" loading="lazy">
+                    <img src="https://i.ibb.co/WFvCGCJ/image.png" alt="Preview 3" loading="lazy">
+                    <img src="https://i.ibb.co/KjPY4JX/image.png" alt="Preview 4" loading="lazy">
+                </div>
+            </div>
+            <div id="carouselDots" class="carousel-dots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>
+            <span data-i18n="userAgreement">用户协议</span>
+            <span class="separator">|</span>
+            <span data-i18n="privacyPolicy">隐私政策</span>
+        </div>
+        <div data-i18n="icp">京ICP备2022035493号-3</div>
+        <div data-i18n="publicSecurity">京公网安备11011402014148号</div>
+        <div data-i18n="copyright">Copyright © Mutation Lab All Rights Reserved.</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 多语言配置
+            const i18n = {
+                zh: {
+                    title: '听话小黑板',
+                    lead: '"听话小黑板"让听障人士与亲友的沟通更轻松。',
+                    description: 'App 实时将语音转换为文字，帮助听障人士即时了解对话内容。简单直观的界面设计，让沟通自然顺畅。',
+                    cta: '下载"听话小黑板"，开启无障碍交流。',
+                    download: '立即下载',
+                    currentLang: '简体中文',
+                    userAgreement: '用户协议',
+                    privacyPolicy: '隐私政策',
+                    icp: '京ICP备2022035493号-3',
+                    publicSecurity: '京公网安备11011402014148号',
+                    copyright: 'Copyright © Mutation Lab All Rights Reserved.',
+                    images: [
+                        'https://i.ibb.co/3TjcCdT/image.png',
+                        'https://i.ibb.co/FYxC4JQ/image.png',
+                        'https://i.ibb.co/hWM2tKK/image.png',
+                        'https://i.ibb.co/WFvCGCJ/image.png',
+                        'https://i.ibb.co/KjPY4JX/image.png'
+                    ]
+                },
+                en: {
+                    title: 'ChatBoard',
+                    lead: 'ChatBoard makes communication easier for people with hearing disabilities.',
+                    description: 'The app converts speech to text in real-time, helping people with hearing disabilities understand conversations instantly. Simple and intuitive interface design makes communication natural and smooth.',
+                    cta: 'Download ChatBoard and start barrier-free communication.',
+                    download: 'Download Now',
+                    currentLang: 'English',
+                    userAgreement: 'User Agreement',
+                    privacyPolicy: 'Privacy Policy',
+                    icp: 'ICP License No.2022035493-3',
+                    publicSecurity: 'Public Security No.11011402014148',
+                    copyright: 'Copyright © Mutation Lab All Rights Reserved.',
+                    images: [
+                        'https://i.ibb.co/6sfTrht/image.png',
+                        'https://i.ibb.co/gwBhpKd/1.png',
+                        'https://i.ibb.co/QXVVgYH/2.png',
+                        'https://i.ibb.co/jGwFS3p/3.png',
+                        'https://i.ibb.co/hMFvVfk/4.png'
+                    ]
+                },
+                ja: {
+                    title: 'チャット黒板',
+                    lead: 'チャット黒板で、聴覚障害者と家族・友人とのコミュニケーションがより簡単に。',
+                    description: 'アプリが音声をリアルタイムでテキストに変換し、聴覚障害者が会話の内容をすぐに理解できるようサポートします。シンプルで直感的なインターフェースで、自然なコミュニケーションを実現。',
+                    cta: 'チャット黒板をダウンロードして、バリアフリーなコミュニケーションを始めましょう。',
+                    download: '今すぐダウンロード',
+                    currentLang: '日本語',
+                    userAgreement: '利用規約',
+                    privacyPolicy: 'プライバシーポリシー',
+                    icp: 'ICP許可証番号2022035493-3',
+                    publicSecurity: '公安備案番号11011402014148',
+                    copyright: 'Copyright © Mutation Lab All Rights Reserved.',
+                    images: [
+                        'https://i.ibb.co/ZG8fBxL/image.png',
+                        'https://i.ibb.co/ZNNMwFX/1.png',
+                        'https://i.ibb.co/XbD87tr/2.png',
+                        'https://i.ibb.co/Bt57LpF/3.png',
+                        'https://i.ibb.co/nbL024J/4.png'
+                    ]
+                }
+            };
+
+            // 获取DOM元素
+            const languageBtn = document.getElementById('languageBtn');
+            const languageMenu = document.getElementById('languageMenu');
+            const currentLang = document.getElementById('currentLang');
+            const carousel = document.getElementById('carousel');
+            const dots = document.querySelectorAll('.dot');
+            const options = document.querySelectorAll('.language-option');
+
+            // 语言切换功能
+            languageBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                languageMenu.classList.toggle('show');
+            });
+
+            document.addEventListener('click', () => {
+                languageMenu.classList.remove('show');
+            });
+
+            languageMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            // 更新语言函数
+            function updateLanguage(lang) {
+                const elements = document.querySelectorAll('[data-i18n]');
+                elements.forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (i18n[lang][key]) {
+                        element.textContent = i18n[lang][key];
+                    }
+                });
+
+                // 更新图片
+                const carouselImages = document.querySelectorAll('.carousel img');
+                carouselImages.forEach((img, index) => {
+                    img.src = i18n[lang].images[index];
+                });
+
+                // 更新当前语言显示
+                currentLang.textContent = i18n[lang].currentLang;
+                
+                // 更新文档语言
+                document.documentElement.lang = lang;
+                
+                // 关闭语言菜单
+                languageMenu.classList.remove('show');
+            }
+
+            // 语言选项点击事件
+            options.forEach(option => {
+                option.addEventListener('click', () => {
+                    const lang = option.getAttribute('data-lang');
+                    updateLanguage(lang);
+                });
+            });
+
+            // 轮播图功能
+            let currentIndex = 0;
+            let autoplayInterval;
+
+            function updateCarousel() {
+                carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            }
+
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % dots.length;
+                updateCarousel();
+            }
+
+            function startAutoplay() {
+                autoplayInterval = setInterval(nextSlide, 3000);
+            }
+
+            function stopAutoplay() {
+                clearInterval(autoplayInterval);
+            }
+
+            // 点击圆点切换图片
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentIndex = index;
+                    updateCarousel();
+                    stopAutoplay();
+                    startAutoplay();
+                });
+            });
+
+            // 鼠标悬停时停止自动播放
+            carousel.addEventListener('mouseenter', stopAutoplay);
+            carousel.addEventListener('mouseleave', startAutoplay);
+
+            // 预加载其他语言的图片
+            Object.values(i18n).forEach(lang => {
+                lang.images.forEach(src => {
+                    const img = new Image();
+                    img.src = src;
+                });
+            });
+
+            // 启动自动播放
+            startAutoplay();
+        });
+    </script>
+</body>
+</html>
